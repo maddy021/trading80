@@ -2,7 +2,6 @@ import axios from "axios";
 import type { Request, Response } from "express";
 import { normalizeTrading80Call } from "../utils/trading80.mapper.js";
 import { Trading80Call } from "../Models/trading80.model.js";
-import {Trading80AgentScraper} from "../utils/scraper.js"
 
 async function fetchCallAlerts(sessionCookie: string) {
   try {
@@ -25,7 +24,6 @@ async function fetchCallAlerts(sessionCookie: string) {
   }
 }
 
-const trading80=new Trading80AgentScraper();
 
 export const Agent = {
   syncCalls: async (req: Request, res: Response) => {
