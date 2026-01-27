@@ -28,16 +28,6 @@ async function fetchCallAlerts(sessionCookie: string) {
 const trading80=new Trading80AgentScraper();
 
 export const Agent = {
-  login:async (req:Request,res:Response)=> {
-        try {
-            await trading80.initialize();
-            await trading80.login();
-            return res.json({ message: 'Login successful' });
-        } catch (error) {
-            console.error('❌ Login failed:', error);
-            res.status(500).json({ error: 'Login failed', details: (error as Error).message });        }
-    },
-    
   syncCalls: async (req: Request, res: Response) => {
   try {
     const sessionCookie =process.env.session_cookie;
