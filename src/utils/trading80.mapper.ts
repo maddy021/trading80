@@ -1,3 +1,7 @@
+function parseCallDate(calltime:string) {
+  const currentYear = new Date().getFullYear();
+  return new Date(`${calltime} ${currentYear}`);
+}
 export function normalizeTrading80Call(call: any) {
   return {
     externalCallId: call.id,
@@ -8,7 +12,7 @@ export function normalizeTrading80Call(call: any) {
       ? Number(String(call.potential).replace(/,/g, ""))
       : null,
     stopLoss: Number(String(call.SL).replace(/,/g, "")),
-    createdAtTrading80: new Date(call.calltime),
+    createdAtTrading80: parseCallDate(call.calltime),
     rawPayload: call,
   };
 }
