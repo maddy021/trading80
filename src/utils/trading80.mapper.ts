@@ -4,15 +4,14 @@ function parseCallDate(calltime:string) {
 }
 export function normalizeTrading80Call(call: any) {
   return {
-    externalCallId: call.id,
+    providerCallId: call.id,
     symbol: call.sname,
     side: call.type,
     entryPrice: Number(String(call.tprice).replace(/,/g, "")),
-    target: call.potential
+    targetReturnPercent: call.potential
       ? Number(String(call.potential).replace(/,/g, ""))
       : null,
-    stopLoss: Number(String(call.SL).replace(/,/g, "")),
-    createdAtTrading80: parseCallDate(call.calltime),
-    rawPayload: call,
+    stopLossPrice: Number(String(call.SL).replace(/,/g, "")),
+    signalGeneratedAt: parseCallDate(call.calltime),
   };
 }

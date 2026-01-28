@@ -2,20 +2,32 @@ import mongoose from "mongoose";
 
 const Trading80CallSchema = new mongoose.Schema(
   {
-    externalCallId: { type: String, unique: true, index: true },
-    symbol: String,
-    side: { type: String, enum: ["BUY", "SELL"] },
-    entryPrice: Number,
-    target: Number,
-    stopLoss: Number,
-    status: {
+    providerCallId: { type: String, unique: true, index: true },
+
+    symbol: { type: String, index: true },
+
+    side: {
       type: String,
-      enum: ["ACTIVE", "CLOSED", "REVERSED"],
-      index: true,
+      enum: ["BUY", "SELL"],
+      required: true,
     },
-    createdAtTrading80: Date,
+
+    entryPrice: { type: Number, required: true },
+
+    targetReturnPercent: Number,
+
+    stopLossPrice: Number,
+
+    tradeStatus: {
+      type: String,
+      enum: ["OPEN", "CLOSED", "REVERSED"],
+      index: true,
+      required: true,
+    },
+
+    signalGeneratedAt: Date,
+
     lastSyncedAt: Date,
-    rawPayload: mongoose.Schema.Types.Mixed,
   },
   { timestamps: true }
 );

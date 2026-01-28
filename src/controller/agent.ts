@@ -15,9 +15,6 @@ async function fetchCallAlerts(sessionCookie: string) {
       timeout: 10000,
     }
   );
-
-  console.log("response data",response.data);
-
   return response.data;
   } catch (error) {
     console.log("Getting error in fetching call Alerts",error);
@@ -43,10 +40,10 @@ export const Agent = {
     // 1️⃣ UPSERT ACTIVE CALLS
     for (const call of activeCalls) {
       const normalized = normalizeTrading80Call(call);
-      activeExternalIds.add(normalized.externalCallId);
+      activeExternalIds.add(normalized.providerCallId);
 
       await Trading80Call.findOneAndUpdate(
-        { externalCallId: normalized.externalCallId },
+        { providerCallId: normalized.providerCallId },
         {
           $set: {
             ...normalized,
@@ -67,12 +64,11 @@ export const Agent = {
           : "REVERSED";
 
       await Trading80Call.findOneAndUpdate(
-        { externalCallId: call.id },
+        { providerCallId: call.id },
         {
           $set: {
             status,
             lastSyncedAt: new Date(),
-            rawPayload: call,
           },
         }
       );
@@ -82,7 +78,7 @@ export const Agent = {
     await Trading80Call.updateMany(
       {
         status: "ACTIVE",
-        externalCallId: { $nin: Array.from(activeExternalIds) },
+        providerCallId: { $nin: Array.from(activeExternalIds) },
       },
       {
         $set: {
