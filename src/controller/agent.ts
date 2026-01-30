@@ -101,7 +101,7 @@ export const Agent = {
 
   fetch: async (req: Request, res: Response) => {
   try {
-    const status = req.query.status as string;
+    const status = req.query.status as string || "ACTIVE";
 
     const query: any = {};
     if (status) query.status = status;
