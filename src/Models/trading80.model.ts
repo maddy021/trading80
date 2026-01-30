@@ -20,7 +20,7 @@ const Trading80CallSchema = new mongoose.Schema(
 
     tradeStatus: {
       type: String,
-      enum: ["OPEN", "CLOSED", "REVERSED"],
+      enum: ["ACTIVE", "CLOSED", "REVERSED"],
       index: true,
       required: true,
     },
