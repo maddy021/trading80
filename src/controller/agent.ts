@@ -47,7 +47,7 @@ export const Agent = {
         {
           $set: {
             ...normalized,
-            status: "ACTIVE",
+            tradeStatus: "ACTIVE",
             lastSyncedAt: new Date(),
           },
         },
@@ -67,7 +67,7 @@ export const Agent = {
         { providerCallId: call.id },
         {
           $set: {
-            status,
+            tradeStatus:status,
             lastSyncedAt: new Date(),
           },
         }
@@ -77,12 +77,12 @@ export const Agent = {
     // 3️⃣ MARK MISSING ACTIVE CALLS AS CLOSED
     await Trading80Call.updateMany(
       {
-        status: "ACTIVE",
+        tradeStatus: "ACTIVE",
         providerCallId: { $nin: Array.from(activeExternalIds) },
       },
       {
         $set: {
-          status: "CLOSED",
+          tradeStatus: "CLOSED",
           lastSyncedAt: new Date(),
         },
       }
@@ -104,7 +104,7 @@ export const Agent = {
     const status = req.query.status as string || "ACTIVE";
 
     const query: any = {};
-    if (status) query.status = status;
+    if (status) query.tradeStatus = status;
 
     const calls = await Trading80Call.find(query)
       .sort({ createdAtTrading80: -1 })
