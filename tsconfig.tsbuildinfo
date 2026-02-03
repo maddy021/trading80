@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/Models/trading80.model.ts","./src/api/v1/agent.ts","./src/api/v1/index.ts","./src/config/db.ts","./src/controller/agent.ts","./src/utils/trading80.mapper.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/Models/marketMojo.model.ts","./src/Models/trading80.model.ts","./src/api/v1/agent.ts","./src/api/v1/index.ts","./src/api/v1/marketmojo.ts","./src/config/db.ts","./src/controller/agent.ts","./src/controller/marketmojo.ts","./src/utils/marketMojo.ts","./src/utils/scrapper.ts","./src/utils/trading80.mapper.ts"],"version":"5.9.3"}

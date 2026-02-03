@@ -57,17 +57,28 @@ export const Agent = {
 
     // 2️⃣ HANDLE CLOSED / REVERSED
     for (const call of changes) {
-      const status =
-        call.reason?.includes("TARGET") ||
-        call.reason?.includes("STOP")
-          ? "CLOSED"
-          : "REVERSED";
+      let tradeStatus;
+
+      if (call.reason === "TARGET_HIT") {
+        tradeStatus = "TARGET_HIT";
+      } else if (call.reason === "STOP_LOSS_HIT") {
+        tradeStatus = "STOP_LOSS_HIT";
+      } else if (call.reason === "REVERSED") {
+        tradeStatus = "REVERSED";
+      } else {
+        tradeStatus = "UNKNOWN";
+      }
+      const isClosed =
+        tradeStatus === "TARGET_HIT" ||
+        tradeStatus === "STOP_LOSS_HIT"
+        || tradeStatus === "REVERSED";
 
       await Trading80Call.findOneAndUpdate(
         { providerCallId: call.id },
         {
           $set: {
-            tradeStatus:status,
+            tradeStatus:tradeStatus,
+            tradeState: isClosed ? "CLOSED" : "OPEN",
             lastSyncedAt: new Date(),
           },
         }
@@ -82,7 +93,7 @@ export const Agent = {
       },
       {
         $set: {
-          tradeStatus: "CLOSED",
+          tradeState: "CLOSED",
           lastSyncedAt: new Date(),
         },
       }

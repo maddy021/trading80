@@ -24,6 +24,12 @@ const Trading80CallSchema = new mongoose.Schema(
       index: true,
       required: true,
     },
+    tradeState: {
+      type: String,
+      enum: ["OPEN", "CLOSED"],
+      index: true,
+      required: true,
+    },
 
     signalGeneratedAt: Date,
 
