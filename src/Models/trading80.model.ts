@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const Trading80CallSchema = new mongoose.Schema(
   {
     providerCallId: { type: String, unique: true, index: true },
+    stockId: { type: Number, unique: true, index: true },
 
     symbol: { type: String, index: true },
 

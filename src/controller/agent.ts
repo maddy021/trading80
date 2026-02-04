@@ -35,15 +35,16 @@ export const Agent = {
     const activeCalls = data?.data?.new ?? [];
     const changes = data?.data?.changes ?? [];
 
-    const activeExternalIds = new Set<string>();
+    const activeExternalIds = new Set<number>();
 
     // 1️⃣ UPSERT ACTIVE CALLS
     for (const call of activeCalls) {
       const normalized = normalizeTrading80Call(call);
-      activeExternalIds.add(normalized.providerCallId);
+      activeExternalIds.add(normalized.stockId);
+      console.log("normalized",normalized);
 
       await Trading80Call.findOneAndUpdate(
-        { providerCallId: normalized.providerCallId },
+        { stockId: normalized.stockId },
         {
           $set: {
             ...normalized,
@@ -58,10 +59,10 @@ export const Agent = {
     // 2️⃣ HANDLE CLOSED / REVERSED
     for (const call of changes) {
       let tradeStatus;
-
-      if (call.reason === "TARGET_HIT") {
+      console.log("call reason",call.reason);
+      if (call.reason === "TARGET HIT") {
         tradeStatus = "TARGET_HIT";
-      } else if (call.reason === "STOP_LOSS_HIT") {
+      } else if (call.reason === "STOP LOSS HIT") {
         tradeStatus = "STOP_LOSS_HIT";
       } else if (call.reason === "REVERSED") {
         tradeStatus = "REVERSED";
@@ -72,9 +73,8 @@ export const Agent = {
         tradeStatus === "TARGET_HIT" ||
         tradeStatus === "STOP_LOSS_HIT"
         || tradeStatus === "REVERSED";
-
       await Trading80Call.findOneAndUpdate(
-        { providerCallId: call.id },
+        { stockId: call.stockid },
         {
           $set: {
             tradeStatus:tradeStatus,
@@ -89,7 +89,7 @@ export const Agent = {
     await Trading80Call.updateMany(
       {
         tradeStatus: "ACTIVE",
-        providerCallId: { $nin: Array.from(activeExternalIds) },
+        stockId: { $nin: Array.from(activeExternalIds) },
       },
       {
         $set: {

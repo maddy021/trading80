@@ -5,6 +5,7 @@ function parseCallDate(calltime:string) {
 export function normalizeTrading80Call(call: any) {
   return {
     providerCallId: call.id,
+    stockId: Number(call.stockid),
     symbol: call.sname,
     side: call.type,
     entryPrice: Number(String(call.tprice).replace(/,/g, "")),
