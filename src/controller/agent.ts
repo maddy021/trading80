@@ -143,12 +143,12 @@ export const Agent = {
 
   fetch: async (req: Request, res: Response) => {
   try {
-    const status = req.query.status as string || "ACTIVE";
+    // const status = req.query.status as string || "ACTIVE";
 
-    const query: any = {};
-    if (status) query.tradeStatus = status;
+    // const query: any = {};
+    // if (status) query.tradeStatus = status;
 
-    const calls = await Trading80Call.find(query)
+    const calls = await Trading80Call.find()
       .sort({ createdAtTrading80: -1 })
       .lean();
 
