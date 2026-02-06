@@ -276,6 +276,9 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
                 { upsert: true }
               );
       }
+      else if(!isInHoldings && isInCurrCalls){
+        await Trading80Call.deleteOne({stockId:call.stockid})
+      }
       else if(isInCurrCalls && isInHoldings){
           await Trading80Call.findOneAndUpdate(
                 { stockId: call.stockid },
