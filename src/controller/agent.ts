@@ -175,7 +175,7 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
       const changes = data?.data?.changes ?? [];
 
 
-      const authHeader="Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI0WUJDSEMiLCJqdGkiOiI2OTg0MjlmMjI5NTgwOTQyZTMwY2QyNzYiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaXNQbHVzUGxhbiI6dHJ1ZSwiaWF0IjoxNzcwMjY5MTcwLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3NzAzMjg4MDB9.yMOSqNJpffORy3uqsktv0HXP1h3efVZBXE4FpLFfZVo"
+      const authHeader=process.env.authHeader as string;
       const holdingResponse = await axios.get(
       "https://api.upstox.com/v2/portfolio/long-term-holdings",
       {
