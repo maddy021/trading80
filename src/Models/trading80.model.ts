@@ -4,7 +4,7 @@ const Trading80CallSchema = new mongoose.Schema(
   {
     providerCallId: { type: String},
     stockId: { type: Number, unique: true, index: true },
-    instrument_token:{ type: String, unique: true},
+    instrument_token:{ type: String },
     symbol: { type: String, index: true },
 
     side: {
