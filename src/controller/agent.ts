@@ -109,7 +109,6 @@ export const Agent = {
         {
           $set: {
             tradeStatus:tradeStatus,
-            tradeState: isClosed ? "CLOSED" : "OPEN",
             lastSyncedAt: new Date(),
           },
         }
@@ -124,7 +123,6 @@ export const Agent = {
       },
       {
         $set: {
-          tradeState: "CLOSED",
           lastSyncedAt: new Date(),
         },
       }
@@ -175,7 +173,8 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
       const changes = data?.data?.changes ?? [];
 
 
-      const authHeader=process.env.authHeader as string;
+      // const authHeader=process.env.authHeader as string;
+      const authHeader=(req.headers.authorization || process.env.authHeader) as string;
       const holdingResponse = await axios.get(
       "https://api.upstox.com/v2/portfolio/long-term-holdings",
       {
@@ -189,6 +188,8 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
     const db= client.db("test");
     const collection = db.collection("stocks");
     
+
+    console.log("active calls",activeCalls);
     
     for (const call of activeCalls){
        let matchedInstrument = await findInstrument(collection, call.sname, "NSE_EQ");
@@ -246,7 +247,7 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
       const isInHoldings=holdingData.find((item:any)=>item.instrument_token === instrument_token);
 
       let tradeStatus;
-      console.log("call reason",call.reason);
+      console.log("call reason",call.reason,call.sname);
       if (call.reason === "TARGET HIT") {
         tradeStatus = "TARGET_HIT";
       } else if (call.reason === "STOP LOSS HIT") {
@@ -256,10 +257,7 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
       } else {
         tradeStatus = "UNKNOWN";
       }
-      const isClosed =
-        tradeStatus === "TARGET_HIT" ||
-        tradeStatus === "STOP_LOSS_HIT"
-        || tradeStatus === "REVERSED";
+
       if(isInHoldings && !isInCurrCalls){ 
         const normalized = normalizeTrading80Call(call);       
               await Trading80Call.findOneAndUpdate(
@@ -269,7 +267,6 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
                     ...normalized,
                     tradeStatus:tradeStatus,
                     instrument_token,
-                    tradeState: isClosed ? "CLOSED" : "OPEN",
                     lastSyncedAt: new Date(),
                   },
                 },
@@ -286,7 +283,6 @@ upsertFromHoldings:async(req:Request,res:Response)=>{
                   $set: {
                     tradeStatus:tradeStatus,
                     instrument_token,
-                    tradeState: isClosed ? "CLOSED" : "OPEN",
                     lastSyncedAt: new Date(),
                   },
                 }              );
