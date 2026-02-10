@@ -145,11 +145,11 @@ export const Agent = {
 
     // const query: any = {};
     // if (status) query.tradeStatus = status;
-
     const calls = await Trading80Call.find()
-      .sort({ createdAtTrading80: -1 })
-      .lean();
-
+    .sort({ createdAtTrading80: -1 })
+    .lean();
+    
+    console.log("fetchings calls",calls);
     res.json({
       success: true,
       count: calls.length,
